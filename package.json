@@ -2,6 +2,10 @@
   "name": "apk-to-cordova-browser",
   "version": "1.0.0-alpha1",
   "description": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mmocny/apk-to-cordova-browser.git"
+  },
   "main": "src/apkToCordovaBrowser.js",
   "bin": "src/main.js",
   "scripts": {
@@ -9,6 +13,10 @@
   },
   "author": "mmocny",
   "dependencies": {
-    "optimist": "^0.6.1"
+    "apk-parser": "^0.1.0",
+    "cordova-lib": "^4.1.2",
+    "optimist": "^0.6.1",
+    "q": "^1.1.2",
+    "shelljs": "^0.3.0"
   }
 }
