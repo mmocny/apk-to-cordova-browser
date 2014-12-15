@@ -44,6 +44,12 @@ function apkToCordovaBrowser(apkFile, outDir) {
     // TODO
   })
 
+  // Retrieve startPage using config.xml
+  .then(function() {
+    // TODO
+    scope.startPage = 'index.html';
+  })
+
   // Clean up www/ (remove cordova.js, cordova_plugins.js, plugins/, ...)
   .then(function() {
     var prefix = path.join(scope.zipDir, 'assets', 'www');
@@ -71,22 +77,41 @@ function apkToCordovaBrowser(apkFile, outDir) {
     shelljs.rm('-rf', scope.zipDir);
   })
 
+  // cd project
+  .then(function() {
+    process.chdir(outDir);
+  })
+
   // Add cordova-browser platform
   .then(function() {
+    var cdvCommands = require('./cdvCommands');
+    return cdvCommands.runCordovaCommand(['platform', 'add', 'browser']);
   })
 
   // Re-install plugins
   .then(function() {
+    var cdvCommands = require('./cdvCommands');
+    cmds = [];
+    Object.keys(scope.plugins).forEach(function(pluginId) {
+      cmds.push(['plugin', 'add', pluginId]);
+    });
+    return cdvCommands.chainCordovaCommands(cmds, { ignoreFailures: true });
+  })
+
+  // cd ..
+  .then(function() {
+    process.chdir(path.join('..'));
   })
 
   // console.log the path to browser platforms' www/
   .then(function() {
+    console.log(path.resolve(path.join(outDir, 'platforms', 'browser', 'www', scope.startPage)));
   })
 
 
   // TODO: Debug
   .then(function() {
-    console.log(scope);
+    //console.log(scope);
   })
   .done();
 }
