@@ -46,6 +46,11 @@ function apkToCordovaBrowser(apkFile, outDir) {
 
   // Clean up www/ (remove cordova.js, cordova_plugins.js, plugins/, ...)
   .then(function() {
+    var prefix = path.join(scope.zipDir, 'assets', 'www');
+    var toRemove = ['cordova.js', 'cordova_plugins.js', 'plugins'];
+    toRemove.forEach(function(item) {
+      shelljs.rm('-rf', path.join(prefix, item));
+    });
   })
 
   // Create a cordova-browser project with the right name and packageId, copying the www/ directory
