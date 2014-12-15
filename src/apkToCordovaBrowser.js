@@ -46,8 +46,10 @@ function apkToCordovaBrowser(apkFile, outDir) {
 
   // Retrieve startPage using config.xml
   .then(function() {
-    // TODO
-    scope.startPage = 'index.html';
+    return require('./parseConfigXml')(apkFile)
+      .then(function(startPage) {
+        scope.startPage = startPage;
+      });
   })
 
   // Clean up www/ (remove cordova.js, cordova_plugins.js, plugins/, ...)
