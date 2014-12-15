@@ -10,6 +10,14 @@ npm link
 
 ## Usage
 
+Copied the output of `apk-to-cordova-browser --help`:
+
 ```
-apk-to-cordova-browser APK_FILE
+Convert a cordova-based Android APK to a cordova-browser project.
+Usage: apk-to-cordova-browser [APK_FILE]
+
+Options:
+  -o, --out   Output directory.
+  -h, --help  Show usage message.
+
 ```

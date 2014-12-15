@@ -108,11 +108,7 @@ function apkToCordovaBrowser(apkFile, outDir) {
     console.log(path.resolve(path.join(outDir, 'platforms', 'browser', 'www', scope.startPage)));
   })
 
-
-  // TODO: Debug
-  .then(function() {
-    //console.log(scope);
-  })
+  // Thats it!
   .done();
 }
 
