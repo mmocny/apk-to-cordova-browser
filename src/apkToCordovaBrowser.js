@@ -39,6 +39,11 @@ function apkToCordovaBrowser(apkFile, outDir) {
     scope.plugins = plugins;
   })
 
+  // If there is no cordova_plugins.js, this isn't a valid Cordova app!
+  .catch(function() {
+    return Q.reject(path.basename(apkFile) + ' is is not a valid Cordova App!');
+  })
+
   // Retrieve cordova version, using cordova.js
   .then(function() {
     // TODO
@@ -105,13 +110,13 @@ function apkToCordovaBrowser(apkFile, outDir) {
     process.chdir(path.join('..'));
   })
 
-  // console.log the path to browser platforms' www/
-  .then(function() {
-    console.log(path.resolve(path.join(outDir, 'platforms', 'browser', 'www', scope.startPage)));
-  })
-
   // Thats it!
-  .done();
+  .done(function() {
+    // console.log the path to browser platforms' www/
+    console.log(path.resolve(path.join(outDir, 'platforms', 'browser', 'www', scope.startPage)));
+  }, function(err) {
+    console.error(err);
+  });
 }
 
 /******************************************************************************/
