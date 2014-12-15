@@ -55,6 +55,15 @@ function apkToCordovaBrowser(apkFile, outDir) {
 
   // Create a cordova-browser project with the right name and packageId, copying the www/ directory
   .then(function() {
+    var cdvCommands = require('./cdvCommands');
+    shelljs.rm('-rf', outDir);
+    return cdvCommands.runCordovaCommand(['create', outDir, scope.packageId, path.basename(outDir), {
+      lib: {
+        www: {
+          url: path.join(scope.zipDir, 'assets', 'www')
+        }
+      }
+    }]);
   })
 
   // Delete zipDir
