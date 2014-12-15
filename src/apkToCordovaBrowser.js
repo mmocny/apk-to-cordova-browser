@@ -2,6 +2,8 @@
 
 var Q = require('q');
 var shelljs = require('shelljs');
+var fs = require('fs');
+var path = require('path');
 
 /******************************************************************************/
 
@@ -30,10 +32,16 @@ function apkToCordovaBrowser(apkFile, outDir) {
 
   // Retrieve plugin list, using cordova_plugins.js
   .then(function() {
+    var data = fs.readFileSync(path.join(scope.zipDir, 'assets', 'www', 'cordova_plugins.js'), 'utf-8');
+    var pluginsJson = data.split('METADATA')[1];
+    pluginsJson = pluginsJson.substring(0, pluginsJson.lastIndexOf('\n'));
+    var plugins = JSON.parse(pluginsJson);
+    scope.plugins = plugins;
   })
 
   // Retrieve cordova version, using cordova.js
   .then(function() {
+    // TODO
   })
 
   // Clean up www/ (remove cordova.js, cordova_plugins.js, plugins/, ...)
