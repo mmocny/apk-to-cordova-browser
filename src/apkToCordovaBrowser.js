@@ -9,6 +9,7 @@ var path = require('path');
 
 function apkToCordovaBrowser(apkFile, outDir) {
   var scope = {};
+  scope.startDir = process.cwd();
 
   // Start the promise train..
   Q.all([])
@@ -66,7 +67,7 @@ function apkToCordovaBrowser(apkFile, outDir) {
     });
   })
 
-  // Create a cordova-browser project with the right name and packageId, copying the www/ directory
+  // Create a cordova project with the right name and packageId, copying the www/ directory
   .then(function() {
     var cdvCommands = require('./cdvCommands');
     shelljs.rm('-rf', outDir);
@@ -77,11 +78,6 @@ function apkToCordovaBrowser(apkFile, outDir) {
         }
       }
     }]);
-  })
-
-  // Delete zipDir
-  .then(function() {
-    shelljs.rm('-rf', scope.zipDir);
   })
 
   // cd project
@@ -105,18 +101,28 @@ function apkToCordovaBrowser(apkFile, outDir) {
     return cdvCommands.chainCordovaCommands(cmds, { ignoreFailures: true });
   })
 
-  // cd ..
+  // cd -
   .then(function() {
-    process.chdir(path.join('..'));
+    process.chdir(scope.startDir);
+  })
+
+  // print the path to browser platforms' www/
+  .then(function() {
+    console.log(path.resolve(path.join(outDir, 'platforms', 'browser', 'www', scope.startPage)));
+  })
+
+  // Pretty print errors
+  .catch(function(err) {
+    console.error(err);
+  })
+
+  // Delete zipDir
+  .then(function() {
+    shelljs.rm('-rf', scope.zipDir);
   })
 
   // Thats it!
-  .done(function() {
-    // console.log the path to browser platforms' www/
-    console.log(path.resolve(path.join(outDir, 'platforms', 'browser', 'www', scope.startPage)));
-  }, function(err) {
-    console.error(err);
-  });
+  .done();
 }
 
 /******************************************************************************/
